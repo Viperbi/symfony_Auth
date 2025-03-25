@@ -60,7 +60,10 @@ final class RegisterController extends AbstractController
     public function activate(mixed $id): void
     {
         if (is_numeric($id)) {
-            $this->accountRepository->findOneBy(['id' => $id])->setStatus(true);
+            $account = $this->accountRepository->findOneBy(['id' => $id]);
+            $account->setStatus(true);
+            $this->em->persist($account);
+            $this->em->flush();
         } else {
             echo "Invalid id";
         }
