@@ -21,7 +21,6 @@ final class RegisterController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly ValidatorInterface $validator,
         private readonly UserPasswordHasherInterface $hasher,
-        private bool $status = false
     ) {}
     #[Route('/register', name: 'app_register_addaccount')]
     public function addAccount(Request $request): Response
@@ -38,6 +37,7 @@ final class RegisterController extends AbstractController
                 $type = "warning";
             } else {
                 $account->setRoles(['ROLE_USER']);
+                $account->setStatus(false);
                 if (!$this->accountRepository->findOneBy(['email' => $account->getEmail()])) {
                     $account->setRoles(['ROLE_USER']);
                     $this->em->persist($account);
@@ -55,9 +55,14 @@ final class RegisterController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[Route('/register/{id}', name: 'app_register_activate')]
-    public function activate(int $id): void
+    public function activate(mixed $id): void
     {
-        $this->accountRepository->findOneBy(['id' => $id])->setStatus(true);
+        if (is_numeric($id)) {
+            $this->accountRepository->findOneBy(['id' => $id])->setStatus(true);
+        } else {
+            echo "Invalid id";
+        }
     }
 }
