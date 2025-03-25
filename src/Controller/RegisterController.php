@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Service\UtilsService;
 
 final class RegisterController extends AbstractController
 {
@@ -21,6 +22,7 @@ final class RegisterController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly ValidatorInterface $validator,
         private readonly UserPasswordHasherInterface $hasher,
+        private readonly UtilsService $utilsService
     ) {}
     #[Route('/register', name: 'app_register_addaccount')]
     public function addAccount(Request $request): Response
@@ -57,15 +59,18 @@ final class RegisterController extends AbstractController
     }
 
     #[Route('/register/{id}', name: 'app_register_activate')]
-    public function activate(mixed $id): void
+    public function activate(mixed $id): Response
     {
+        $msg = "";
         if (is_numeric($id)) {
             $account = $this->accountRepository->findOneBy(['id' => $id]);
             $account->setStatus(true);
             $this->em->persist($account);
             $this->em->flush();
+            $msg = "Account activated";
         } else {
-            echo "Invalid id";
+            $msg = "Invalid account";
         }
+        return new Response($msg);
     }
 }
