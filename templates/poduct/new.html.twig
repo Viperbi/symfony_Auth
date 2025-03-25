@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %} {% block title %}New Poduct{% endblock %} {%
+block body %} {% if is_granted('ROLE_USER')%}
+<h1>Create new Poduct</h1>
+
+{{ include("poduct/_form.html.twig") }}
+
+<a href="{{ path('app_poduct_index') }}">back to list</a>
+{% else %}
+<p>You do not have permission to create a new Poduct.</p>
+{% endif %} {% endblock %}

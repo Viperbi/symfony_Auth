@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %} {% block title %}Edit Poduct{% endblock %} {%
+block body %} {% if is_granted('ROLE_ADMIN')%}
+<h1>Edit Poduct</h1>
+
+{{ include("poduct/_form.html.twig", { button_label: "Update" }) }}
+
+<a href="{{ path('app_poduct_index') }}">back to list</a>
+
+{{ include("poduct/_delete_form.html.twig") }}
+{% else %}
+<p>You do not have permission to edit this item.</p>
+{% endif %} {% endblock %}
