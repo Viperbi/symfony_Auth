@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/poduct')]
 final class PoductController extends AbstractController
 {
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route(name: 'app_poduct_index', methods: ['GET'])]
     public function index(PoductRepository $poductRepository): Response
     {
@@ -24,7 +24,7 @@ final class PoductController extends AbstractController
         ]);
     }
 
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('PUBLIC_ACCESS')]
     #[Route('/{id}', name: 'app_poduct_show', methods: ['GET'])]
     public function show(Poduct $poduct): Response
     {
